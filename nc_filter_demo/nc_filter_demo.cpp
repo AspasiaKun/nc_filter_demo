@@ -125,11 +125,10 @@ int main()
         return -1;
     }
 
-    Mat outputImage = inputImage.clone();
     #pragma omp parallel for
-    for (int x = 0; x < outputImage.rows; x++) {
-        for (int y = 0; y < outputImage.cols; y++) {
-            Vec3b pixel = outputImage.at<Vec3b>(x, y);
+    for (int x = 0; x < inputImage.rows; x++) {
+        for (int y = 0; y < inputImage.cols; y++) {
+            Vec3b pixel = inputImage.at<Vec3b>(x, y);
             Color inputColor = { pixel[2] / 255.f,
                                 pixel[1] / 255.f,
                                 pixel[0] / 255.f }; // in opencv ,3 channel is b g r
@@ -137,11 +136,11 @@ int main()
             pixel[2] = outputColor.r * 255;
             pixel[1] = outputColor.g * 255;
             pixel[0] = outputColor.b * 255;
-            outputImage.at<Vec3b>(x, y) = pixel;
+            inputImage.at<Vec3b>(x, y) = pixel;
         }
     }
 
-    cv::imwrite("output_image.tif", outputImage);
+    cv::imwrite("output_image.tif", inputImage);
     // cv::namedWindow("test window");
     // cv::imshow("test window", outputImage);
     // cv::waitKey(0);
